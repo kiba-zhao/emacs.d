@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# name: egg-config-file
+# key: ecgf
+# group: egg
+# --
+/**
+ * @fileOverview ${1:默认}配置
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <kiba.rain@qq.com>
+ * @license MIT
+ */
+'use strict';
+
+module.exports = app =>{
+
+  const exports = {};
+
+  $0
+
+  return exports;
+
+};

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: egg-method
+# key: emet
+# group: egg
+# --
+async ${1:functionName}(${2:...args}){
+
+  const {${3:ctx}} = this;
+  $0
+
+}

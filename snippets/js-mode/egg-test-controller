@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: egg-test-controller
+# key: etc
+# group: egg
+# --
+
+describe('${1:$$(yas-choose-value '("GET" "POST" "PUT" "PATCH" "DELETE"))} ${2:/`(file-name-nondirectory (replace-regexp-in-string ".test.js" "" (buffer-file-name)))`}', () => {
+  
+  const request_url = '\`${2:$(replace-regexp-in-string ":[a-zA-Z0-9_]+" (lambda (s) (concat "${" (substring s 1) "}")) yas-text)}\`';
+
+  $0
+    
+});

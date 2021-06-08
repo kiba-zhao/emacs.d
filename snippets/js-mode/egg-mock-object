@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: egg-mock-object
+# key: emo
+# group: egg
+# --
+const ${1:ObjectName} = sinon.mock(${2:app.model}.$1);
+$1.expects('${3:methodName}').withExactArgs($4).resolves($5)$6;
+$0$1.verify();

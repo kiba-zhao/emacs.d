@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: jest-describe
+# key: jdesc
+# group: jest
+# --
+
+describe('${1:describe story}',()=>{
+    $0
+});

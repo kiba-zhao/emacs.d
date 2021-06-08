@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: egg-test-helper-method
+# key: ethm
+# group: egg
+# --
+const ctx = app.mockContext({});
+const res = await ctx.helper${1:.method}($2);
+$0assert${3:.deepStrictEqual}(res,$4);

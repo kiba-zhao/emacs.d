@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: egg-test-story
+# key: ets
+# group: egg
+# --
+it('${1:success}', async () => {
+
+  $0
+
+});

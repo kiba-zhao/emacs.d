@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: egg-test-http
+# key: eth
+# group: egg
+# --
+${1:$(if(equal yas-text "") "// ")}const request_headers = ${1:};
+${1:$(if(not (equal yas-text "")) "\napp.mockHeaders(request_headers);")}
+const ctx = app.mockContext();
+const res = await ctx${2:.httpApi}${3:.service}${4:.method}($5);
+assert.deepStrictEqual(res,${6:response});

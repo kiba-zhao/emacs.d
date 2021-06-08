@@ -1,0 +1,112 @@
+# -*- mode: snippet -*-
+# name: egg-rest-controller
+# key: erc
+# group: egg-rest
+# --
+/**
+ * @fileOverview $1控制器
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <xiafeng@aegleanalytica.io>
+ * @license MIT
+ */
+'use strict';
+
+const {Controller} = require('egg');
+
+class ${2:`(replace-regexp-in-string "_" "" (capitalize (file-name-nondirectory (file-name-sans-extension buffer-file-name))) "")`}Controller extends Controller{
+
+  async search() {
+  
+    const { ctx } = this;
+    ${5:${4:$(if(equal yas-text "") "" "\nconst \{")} $4 ${4:$(if(equal yas-text "") "" "\} = ctx.params;")}}
+    const res = await ctx.service.${3:${2:$(if (> (length yas-text) 0) (concat (downcase (substring yas-text 0 1)) (substring yas-text 1)) yas-text)}}.find(${4:$(if(equal yas-text "") "ctx.query" (format "{...ctx.query,%s}" yas-text))});
+
+    ctx.body = res;
+
+  }
+
+  async head(){
+  
+    const { ctx } = this;
+
+    const { ${7:${4:$(if(equal yas-text "") "id" (format "id,%s" yas-text))}} } = ctx.params;
+    const res = await ctx.service.$3.findOne({ ...ctx.query, $7 });
+    if (!res) { return; }
+
+    const buffer = new Buffer(JSON.stringify(res));
+    ctx.set({
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-length': buffer.byteLength,
+    });
+    ctx.status = 200;
+  }
+
+  async get(){
+
+    const { ctx } = this;
+
+    const { $7 } = ctx.params;
+    const res = await ctx.service.$3.findOne({ ...ctx.query, $7 });
+
+    if (!res) { return; }
+    ctx.body = res;
+
+  }
+
+  async post(){
+
+    const { ctx } = this;
+    const data = ctx.request.body;
+    $5
+    const res = await ctx.service.$3.createOne(${4:$(if(equal yas-text "") "data" (format "{...data,%s}" yas-text))});
+
+    if (!res) { return; }
+
+    ctx.body = res;
+    ctx.status = 201;
+
+  }
+
+  async put(){
+
+    const { ctx } = this;
+
+    const { $7 } = ctx.params;
+    const data = ctx.request.body;
+
+    const res = await ctx.service.$3.updateOne({ ...ctx.query, $7 }, data);
+    if (!res) return;
+
+    ctx.body = res;
+
+  }
+
+  async patch(){
+  
+    const { ctx } = this;
+
+    const { $7 } = ctx.params;
+    const data = ctx.request.body;
+
+    const res = await ctx.service.$3.updateOne({ ...ctx.query, $7 }, data);
+    if (!res) return;
+
+    ctx.body = res;
+
+  }
+
+  async deleteOne(){
+
+    const { ctx } = this;
+
+    const { $7 } = ctx.params;
+    const res = await ctx.service.$3.deleteOne({ ...ctx.query, $7 });
+    if (!res) { return; }
+
+    ctx.status = 204;
+
+  }
+
+}
+
+module.exports = $2Controller;

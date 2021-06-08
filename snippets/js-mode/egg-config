@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: egg-config
+# key: ecg
+# group: egg
+# --
+exports${1:.pluginName} = ${2:config};

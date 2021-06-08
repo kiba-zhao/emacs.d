@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: vue-view
+# key: vvw
+# group: vue
+# --
+<!-- $1视图 -->
+<i18n>
+en:
+  _:$1
+zh:
+  _:$1
+</i18n>
+
+<template>
+  <${2:div}>$1</$2>
+</template>
+
+<script>
+
+export default {
+  name:'${3:`(file-name-nondirectory (file-name-sans-extension buffer-file-name))`}'
+};
+
+</script>
+
+<style scoped></style>

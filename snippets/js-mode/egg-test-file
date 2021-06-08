@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: egg-test-file
+# key: etf
+# group: egg
+# --
+/**
+ * @fileOverview $1测试
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <kiba.rain@qq.com>
+ * @license MIT
+ */
+'use strict';
+
+const { app, assert } = require('egg-mock/bootstrap');
+const sinon = require('sinon');
+
+describe('${2:`(substring buffer-file-name (+ (string-match "/test/" buffer-file-name) 1))`}', () => {
+
+  $0
+
+});

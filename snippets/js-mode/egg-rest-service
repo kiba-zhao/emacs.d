@@ -1,0 +1,79 @@
+# -*- mode: snippet -*-
+# name: egg-rest-service
+# key: ers
+# group: egg-rest
+# --
+/**
+ * @fileOverview $1业务逻辑代码
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <xiafeng@aegleanalytica.io>
+ * @license MIT
+ */
+'use strict';
+
+const {Service} = require('egg');
+
+class ${2:`(replace-regexp-in-string "_" "" (capitalize (file-name-nondirectory (file-name-sans-extension buffer-file-name))) "")`}Service extends Service{
+
+  async find(condition){
+
+    const { ctx } = this;
+    const res = await ctx.dao.${3:$2}.find(condition);
+    return res;
+
+  }
+
+  async findOne(condition){
+
+    const { ctx } = this;
+    const res = await ctx.dao.$3.findOne(condition);
+    return res;
+
+  }
+
+  async createOne(entity) {
+   
+    const { ctx } = this;
+     
+    const res = await ctx.dao.$3.createOne(entity);
+    return res;
+
+  }
+
+  async replaceOne(condition, entity) {
+
+    const { ctx } = this;
+
+    const preceding = await ctx.dao.$3.findOne(condition);
+    if (!preceding) { return null; }
+
+    const res = await ctx.dao.$3.replaceOne(condition, entity);
+    return res;
+
+  }
+
+  async updateOne(condition, entity) {
+
+    const { ctx } = this;
+
+    const preceding = await ctx.dao.$3.findOne(condition);
+    if (!preceding) { return null; }
+
+    const res = await ctx.dao.$3.updateOne(condition, entity);
+    return res;
+
+  }  
+
+  async deleteOne(condition) {
+
+    const { ctx } = this;
+    const preceding = await ctx.dao.$3.findOne(condition);
+    if (!preceding) return null;
+    const res = await ctx.dao.$3.deleteOne(condition);
+    return res ? preceding : null;
+
+  }
+
+}
+
+module.exports = $2Service;

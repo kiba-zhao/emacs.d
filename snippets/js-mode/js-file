@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: js-file
+# key: jsf
+# group: js
+# --
+/**
+ * @fileOverview $1
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <kiba.rain@qq.com>
+ * @license MIT
+ */
+'use strict';
+
+$0

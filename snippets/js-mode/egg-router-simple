@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: egg-router-simple
+# key: ers
+# group: egg
+# --
+router${3:$(if(equal yas-text ".search") ".get" yas-text)}('$1',controller${2:.ctl}${3:.method});

@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: egg-test-delete
+# key: etd
+# group: egg
+# --
+$0
+/* eslint no-eval: 0 */
+${1:$(if(equal yas-text "") "// ")}const request_query = ${1:};
+${2:$(if(equal yas-text "") "// ")}const request_headers = ${2:};
+${3:$(if(equal yas-text "") "// ")}const response_body = ${3:};
+${4:$(if(equal yas-text "") "// ")}const response_headers = ${4:};
+  
+let res = app.httpRequest()
+    .del(eval(request_url))${1:$(if(equal yas-text "") "" "\n.query(request_query)")}${2:$(if(equal yas-text "") "" "\n.set(request_headers)")}
+    .expect(${5:204}${3:$(if(equal yas-text "") "" ",response_body")});
+${4:$(if(equal yas-text "") "" "for(const header_name in response_headers)\nres = res.expect(header_name,response_headers[header_name]);")}
+await res;
+
+return res;

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: jest-it
+# key: jit
+# group: jest
+# --
+
+it('${1:story case}',${2:async} ()=>{
+    $0
+});

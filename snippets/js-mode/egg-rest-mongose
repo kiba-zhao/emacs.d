@@ -1,0 +1,119 @@
+# -*- mode: snippet -*-
+# name: egg-rest-mongose
+# key: ermdb
+# group: egg-rest
+# --
+/**
+ * @fileOverview $1Mongose数据代码
+ * @name `(file-name-nondirectory buffer-file-name)`
+ * @author kiba.x.zhao <xiafeng@aegleanalytica.io>
+ * @license MIT
+ */
+'use strict';
+
+const {Service:MongoDB} = require('egg');
+
+class ${2:`(replace-regexp-in-string "_" "" (capitalize (file-name-nondirectory (file-name-sans-extension buffer-file-name))) "")`}MongoDB extends MongoDB{
+
+  async find(condition){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const res = await app.model.${3:$2}.find({ ..._condition, appId });
+
+    return res.map(ctx.helper.extractMongo);
+
+
+  }
+
+  async findOne(condition){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const res = await app.model.$3.findOne({ ..._condition, appId });
+
+    return ctx.helper.extractMongo(res);
+
+  }
+
+  async exists(condition){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const res = await app.model.$3.exists({ ..._condition, appId });
+
+    return !!res;
+
+  }
+
+  async create(...entities){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+
+    const res = await app.model.$3.create(...entities.map(_ => ({ ..._, appId })));
+    if (!res || res.length <= 0) { return res; }
+    return entities.length > 1 ? res.map(ctx.helper.extractMongo) : [ ctx.helper.extractMongo(res) ];
+
+  }
+
+  async createOne(entity){
+
+    const res = await this.create(entity);
+    return res ? res[0] : res;
+
+  }
+
+  async replaceOne(condition,entity){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const preceding = await app.model.$3.findOneAndReplaceOne({ ..._condition, appId }, { ...entity, appId });
+    if (!preceding) { return preceding; }
+
+    const res = await app.model.$3.findOne(preceding._id);
+    return ctx.helper.extractMongo(res);
+
+  }
+
+  async updateOne(condition,entity){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const model = new app.model.$3({ ...entity, appId });
+    const _entity = ctx.helper.extractMongoEntity(model);
+
+    const preceding = await app.model.$3.findOneAndUpdate({ ..._condition, appId }, _entity);
+    if (!preceding) { return preceding; }
+
+    const res = await app.model.$3.findOne(preceding._id);
+    return ctx.helper.extractMongo(res);
+
+  }
+
+  async deleteOne(condition){
+
+    const { app, ctx } = this;
+    const appId = ctx.helper.getAppId(ctx);
+    const _condition = ctx.helper.transformMongo(app, condition);
+
+    const res = await app.model.$3.deleteOne({ ..._condition, appId });
+    return res;
+
+
+  }
+
+}
+
+module.exports = $2MongoDB;

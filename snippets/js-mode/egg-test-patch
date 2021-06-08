@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: egg-test-patch
+# key: etph
+# group: egg
+# --
+$0
+/* eslint no-eval: 0 */
+${1:$(if(equal yas-text "") "// ")}const request_query = ${1:};
+${2:$(if(equal yas-text "") "// ")}const request_body = ${2:};
+${3:$(if(equal yas-text "") "// ")}const request_headers = ${3:};
+${4:$(if(equal yas-text "") "// ")}const response_body = ${4:};
+${5:$(if(equal yas-text "") "// ")}const response_headers = ${5:};
+  
+let res = app.httpRequest()
+    .patch(eval(request_url))${1:$(if(equal yas-text "") "" "\n.query(request_query)")}${3:$(if(equal yas-text "") "" "\n.set(request_headers)")}
+    .send(${2:$(if(equal yas-text "") "null" "request_body")})
+    .expect(${6:200}${4:$(if(equal yas-text "") "" ",response_body")});
+${5:$(if(equal yas-text "") "" "for(const header_name in response_headers)\nres = res.expect(header_name,response_headers[header_name]);")}
+await res;
+
+return res;
