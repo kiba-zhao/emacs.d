@@ -1,3 +1,8 @@
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "pandoc"))
+
 (use-package web-mode
   :ensure t
   :mode ("\\.html\\'" "\\.htm\\'")
@@ -15,6 +20,13 @@
   :mode ("\\.json\\'")
   :config
   (message "config json-mode"))
+
+(use-package go-mode
+  :ensure t
+  :mode ("\\.go\\'")
+  :interpreter "go"
+  :config
+  (message "config go-mode"))
 
 (use-package typescript-mode
   :ensure t
@@ -45,6 +57,7 @@
 (use-package yasnippet
   :ensure t
   :hook ((typescript-mode . yas-minor-mode)
+         (go-mode . yas-minor-mode)         
          (json-mode . yas-minor-mode)
          (yaml-mode . yas-minor-mode)
          (web-mode . yas-minor-mode)
@@ -57,6 +70,7 @@
 (use-package flycheck
   :ensure t
   :hook ((typescript-mode . flycheck-mode)
+         (go-mode . flycheck-mode)
          (json-mode . flycheck-mode)
          (yaml-mode . flycheck-mode)
          (web-mode . flycheck-mode)
@@ -71,10 +85,11 @@
   :after (flycheck which-key)
   :hook ((typescript-mode . lsp)
          (js2-mode . lsp)
+         (go-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
   (message "config lsp-mode")
-  (setq lsp-enabled-clients '(ts-ls json-ls))
+      ;; (setq lsp-enabled-clients '(ts-ls json-ls gopls))
   (with-eval-after-load 'js
     (define-key js-mode-map (kbd "M-.") nil))
   :commands lsp)
@@ -106,5 +121,14 @@
   :ensure t
   :config
   (message "config projectile"))
+
+(use-package js-doc
+  :after (js2-mode)
+  :config
+  (message "config js-doc")
+ (setq js-doc-mail-address "kiba.rain@qq.com"
+       js-doc-author (format "kiba.x.zhao <%s>" js-doc-mail-address)
+       js-doc-url "https://github.com/kiba-zhao"
+       js-doc-license "MIT"))
 
 (provide 'setup-ide)
