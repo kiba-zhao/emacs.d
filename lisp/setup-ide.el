@@ -47,6 +47,22 @@
   (setq js2-basic-offset 2)
   (setq js-indent-level 2))
 
+(use-package sh-mode
+    :mode ("\\.sh\\'")
+    :interpreter "shell"
+    :config
+    (message "config sh-mode"))
+
+(use-package c-mode
+    :mode ("\\.c\\'")
+    :config
+    (message "config c-mode"))
+
+(use-package c++-mode
+    :mode ("\\.cpp\\'")
+    :config
+    (message "config c++-mode"))
+
 ;; base
 (use-package yasnippet-snippets
   :ensure t
@@ -57,6 +73,9 @@
 (use-package yasnippet
   :ensure t
   :hook ((typescript-mode . yas-minor-mode)
+         (sh-mode . yas-minor-mode)
+         (c-mode . yas-minor-mode)
+         (c++-mode . yas-minor-mode)
          (go-mode . yas-minor-mode)         
          (json-mode . yas-minor-mode)
          (yaml-mode . yas-minor-mode)
@@ -70,6 +89,9 @@
 (use-package flycheck
   :ensure t
   :hook ((typescript-mode . flycheck-mode)
+         (sh-mode . flycheck-mode)
+         (c-mode . flycheck-mode)
+         (c++-mode . flycheck-mode)
          (go-mode . flycheck-mode)
          (json-mode . flycheck-mode)
          (yaml-mode . flycheck-mode)
@@ -84,26 +106,64 @@
   (setq lsp-keymap-prefix "C-c l")
   :after (flycheck which-key)
   :hook ((typescript-mode . lsp)
+         (json-mode . lsp)
          (js2-mode . lsp)
          (go-mode . lsp)
+         (sh-mode . lsp)
+         (c-mode . lsp)
+         (c++-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
   (message "config lsp-mode")
-      ;; (setq lsp-enabled-clients '(ts-ls json-ls gopls))
   (with-eval-after-load 'js
     (define-key js-mode-map (kbd "M-.") nil))
   :commands lsp)
 
-(use-package dap-mode
-  :ensure t
-  :hook (lsp-mode . dap-mode)
-  :after (hydra)
-  :config
-  (message "config dap-mode")
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :init
+;;   :after (:all (flycheck which-key) (:any go-mode sh-mode c-mode c++-mode))
+;;   :hook ((go-mode . lsp)
+;;          (sh-mode . lsp)
+;;          (c-mode . lsp)
+;;          (c++-mode . lsp)
+;;          (lsp-mode . lsp-enable-which-key-integration))
+;;   :config
+;;   (message "config lsp-mode")
+;;   (setq lsp-clangd-binary-path /usr/bin/clangd)
+;;   :commands lsp)
+
+(defun js-setup ()
+  (message "setup js")
   (add-hook 'dap-stopped-hook
-          (lambda (arg) (call-interactively #'dap-hydra)))
+            (lambda (arg) (call-interactively #'dap-hydra)))
   (require 'dap-node)
   (dap-node-setup))
+
+(defun clang-setup ()
+  (message "setup clang")
+  (dap-cpptools-setup)
+  (require 'dap-cpptools))
+
+(use-package dap-mode
+  :ensure t
+  :hook ((typescript-mode .js-setup)
+         (js2-mode .js-setup)
+         (c++-mode .clang-setup)
+         (c-mode .clang-setup))
+  :after lsp-mode
+  :config
+  (message "config dap-mode"))
+  
+;; (use-package dap-mode
+;;   :ensure t
+;;   :hook ((c-mode . lsp)
+;;          (c++-mode . lsp))
+;;   :after (:all (lsp-mode) (:any c++-mode c-mode))
+;;   :config
+;;   (message "config dap-mode with clang")
+;;   (dap-cpptools-setup)
+;;   (require 'dap-cpptools))
 
 (use-package company
   :ensure t
@@ -130,5 +190,35 @@
        js-doc-author (format "kiba.x.zhao <%s>" js-doc-mail-address)
        js-doc-url "https://github.com/kiba-zhao"
        js-doc-license "MIT"))
+
+(use-package helm
+  :ensure t
+  :config
+  (message "config helm")
+  )
+
+(use-package helm-lsp
+  :ensure t
+  :after (helm)
+  :config
+  (message "config helm-lsp"))
+
+(use-package helm-xref
+  :ensure t
+  :after (helm helm-lsp)
+  :config
+  (message "config helm-xref")
+  (define-key global-map [remap find-file] #'helm-find-files)
+  (define-key global-map [remap execute-extended-command] #'helm-M-x)
+  (define-key global-map [remap switch-to-buffer] #'helm-mini))
+
+;; (use-package eglot
+;;   :ensure t
+;;   :after (:any c++-mode c-mode)
+;;   :hook ((c-mode . eglot-ensure)
+;;          (c++-mode . eglot-ensure))
+;;   :config
+;;   (message "config eglot")
+;;   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd")))
 
 (provide 'setup-ide)
