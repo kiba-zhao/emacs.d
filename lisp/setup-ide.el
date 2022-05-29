@@ -30,7 +30,7 @@
 
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.ts\\'")
+  :mode ("\\.ts\\'" "\\.tsx\\'")
   :interpreter "typescript"
   :config
   (message "config typescript-mode")
@@ -39,7 +39,7 @@
 
 (use-package js2-mode
   :ensure t
-  :mode ("\\.js\\'")
+  :mode ("\\.js\\'" "\\.jsx\\'")
   :interpreter "javascript"
   :config
   (message "config js2-mode")
@@ -105,19 +105,27 @@
   :init
   (setq lsp-keymap-prefix "C-c l")
   :after (flycheck which-key)
-  :hook ((typescript-mode . lsp)
-         (json-mode . lsp)
-         (js2-mode . lsp)
-         (go-mode . lsp)
-         (sh-mode . lsp)
-         (c-mode . lsp)
-         (c++-mode . lsp)
+  :hook ((typescript-mode . lsp-deferred)
+         (json-mode . lsp-deferred)
+         (js2-mode . lsp-deferred)
+         (go-mode . lsp-deferred)
+         (sh-mode . lsp-deferred)
+         (c-mode . lsp-deferred)
+         (c++-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
   (message "config lsp-mode")
   (with-eval-after-load 'js
     (define-key js-mode-map (kbd "M-.") nil))
-  :commands lsp)
+  :commands (lsp lsp-deferred))
+
+(use-package lsp-java
+  :ensure t
+  :hook (java-mode . lsp)
+  :after (yasnippet-snippets)
+  :config
+  (message "config lsp-java"))
+
 
 ;; (use-package lsp-mode
 ;;   :ensure t
